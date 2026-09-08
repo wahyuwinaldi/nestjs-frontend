@@ -1,45 +1,27 @@
-# API Template (NestJS + Fastify)
+# Dashboard Template (Vue 3 + Vite + PrimeVue)
 
-Scaffolding backend untuk proyek baru: auth, user, menu, action, permission, settings.
+Scaffolding frontend untuk dashboard admin: auth, user, menu, action, permission, settings, dan layout Sakai.
 
-## Stack
-- NestJS 11 + Fastify
-- PostgreSQL schema `public`
-- JWT (cookie AES) + `x-api-key`
-- Swagger: http://localhost:3000/api/docs
-- MinIO (opsional) + SMTP via MailModule
+## Fitur inti
 
-## Setup DB
-```bash
-# buat database di Postgres, lalu:
-npm run db:schema
-npm run db:seed
-```
-
-Sesuaikan `.env.development` (lihat `.env.example`).
-
-## Run
-```bash
-npm install
-npm run start:dev
-```
-
-## Akun seed
-- username: `super`
-- password: sesuai hash di `database/seeders/04_md_user.sql` (ganti setelah seed)
-
-Pastikan `APP_KEY` / `API_TOKEN` di env cocok dengan baris di `08_d_application.sql`.
-
-## Modul inti
 | Area | Path |
 |------|------|
-| Login | `POST /auth/authorize` |
+| Dashboard | `/` |
 | User | `/master/user` |
-| Permission | `/master/permission` |
-| Menu / Action | `/system/menu`, `/system/action` |
+| Role & Permission | `/master/permission` |
+| Permission Private | `/master/permission/private` |
+| Menu | `/system/menu` |
+| Action | `/system/action` |
 | Website Settings | `/system/website` |
+| Ganti Password | `/account/password` |
+| Login | `/auth/login` |
 
-## Test
+## Setup
+
 ```bash
-npm test
+npm install
+cp .env.development.example .env.development
+npm run dev
 ```
+
+Pastikan backend API berjalan di `http://localhost:3000` (proxy Vite `/api`).

@@ -1,51 +1,43 @@
-// @ts-check
-import eslint from '@eslint/js';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import js from '@eslint/js';
+import prettierConfig from '@vue/eslint-config-prettier';
+import pluginVue from 'eslint-plugin-vue';
+import flatGitignore from 'eslint-config-flat-gitignore';
 import globals from 'globals';
-import tseslint from 'typescript-eslint';
 
-export default tseslint.config(
-  {
-    ignores: [
-      'eslint.config.mjs',
-      // Standalone Node scripts outside the Nest TS project (not in npm run lint).
-      'database/**',
-      'scripts/**',
-    ],
-  },
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
-  {
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
-      },
-      sourceType: 'commonjs',
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
+export default [
+    flatGitignore(),
+    {
+        ignores: ['dist/**', 'coverage/**', 'public/**']
     },
-  },
-  {
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn',
-      "prettier/prettier": ["error", { endOfLine: "auto" }],
+    js.configs.recommended,
+    ...pluginVue.configs['flat/essential'],
+    {
+        languageOptions: {
+            ecmaVersion: 'latest',
+            sourceType: 'module',
+            globals: {
+                ...globals.browser,
+                ...globals.node
+            }
+        },
+        rules: {
+            'vue/multi-word-component-names': 'off',
+            'vue/no-reserved-component-names': 'off',
+            'vue/block-order': [
+                'error',
+                {
+                    order: ['script', 'template', 'style']
+                }
+            ]
+        }
     },
-  },
-  {
-    files: ['test/**/*.ts'],
-    rules: {
-      '@typescript-eslint/no-unsafe-assignment': 'off',
-      '@typescript-eslint/no-unsafe-member-access': 'off',
-      '@typescript-eslint/no-unsafe-call': 'off',
-      '@typescript-eslint/no-unsafe-return': 'off',
-      '@typescript-eslint/no-unsafe-argument': 'off',
-      '@typescript-eslint/require-await': 'off',
+    {
+        files: ['test/**/*.{js,mjs,cjs}', '**/*.{test,spec}.{js,mjs,cjs}'],
+        languageOptions: {
+            globals: {
+                ...globals.vitest
+            }
+        }
     },
-  },
-);
+    prettierConfig
+];
